@@ -1,6 +1,6 @@
 # ProjectileProjectNew
 
-### Try this program live on [my website](https://www.zanestjohn.com/projectile-motion/)!
+### Try this program live on <a href="https://projectiles.zanestjohn.com/" target="_blank">my website</a>!
 
 Hi Austin (or whoever else might be viewing this),
 
