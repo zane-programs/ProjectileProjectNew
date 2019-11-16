@@ -1,3 +1,12 @@
+/**
+ * Project: ProjectileMotionNew
+ * Class: ProjectileLauncher
+ * Due: November 19, 2019
+ * <P>This is my projectile motion project. Please see README.md for more information.</P>
+ * @author Zane St. John
+ * @version 1.0
+ */
+
 import static spark.Spark.*; // All I learned about the Sparkjava framework came from its docs. (http://sparkjava.com/documentation)
 
 public class ProjectileLauncher {
@@ -11,6 +20,7 @@ public class ProjectileLauncher {
         return numRounded;
     }
 
+    // makes zeros for the step parameter in HTML (depending on user-selected decimal recision)
     public static String generateZeros(int zerosToMake) {
         String zerosToReturn = "";
         for (int i = 0; i < zerosToMake; i++) {
@@ -19,25 +29,21 @@ public class ProjectileLauncher {
         return zerosToReturn;
     }
 
-    // learned of exceptions from https://stackoverflow.com/a/8707928
-    public static void main(String[] args) throws java.io.IOException {
-//        System.out.println(get);
+    public static void main(String[] args) {
+        port(3000); // runs server on port 3000
 
-//        Projectile projectile = new Projectile(10,30);
-//        System.out.println(projectile.getFlightTime());
-//        System.out.println(projectile.getYPosAtTime((projectile.getFlightTime() / 2)));
+        staticFiles.location("static"); // static files in "static" folder
 
-        port(3000);
-
-        staticFiles.location("static");
-
+        // PROJECTILE INFORMATION PAGE
         get("/projectile", (req, res) -> {
+            // init projectile object
             Projectile projectile = new Projectile(Double.parseDouble(req.queryParams("launchVelocity")), Double.parseDouble(req.queryParams("launchAngle")));
 
-            int decimalPlaces = Integer.parseInt(req.queryParams("decimalPlaces"));
+            int decimalPlaces = Integer.parseInt(req.queryParams("decimalPlaces")); // user-requested decimal precision
 
-            double flightTime = projectile.getFlightTime();
+            double flightTime = projectile.getFlightTime(); // flight time
 
+            // using roundToDecimals function to round all values
             // values at launch (all values are zero, as start height is zero)
             double launchX = roundToDecimals(0,decimalPlaces);
             double launchY = roundToDecimals(0,decimalPlaces);;
@@ -55,6 +61,7 @@ public class ProjectileLauncher {
             // number of zeros for step parameter for time input (decimal places depending on what you rounded to)
             String stepZeros = generateZeros(decimalPlaces - 1);
 
+            // render HTML (sorry, I know this is ugly)
             return "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Projectile</title><style>table{border-collapse: collapse;}table,th,td{border:1px solid #000;}.hidden{display:none;}</style><script type=\"text/javascript\" src=\"/js/app.js\"></script></head><body>" + "" +
                     "<h1>Projectile Results</h1>" +
                     "<strong>NOTE: all values are approximate</strong><br><br><strong>Rounded to " + decimalPlaces + " decimal places</strong><br>" +
@@ -71,18 +78,22 @@ public class ProjectileLauncher {
                     "s</td></tr></table><br>" +
                     "<form action=\"javascript:void(0);\"> <label for=\"timeInpt\"><strong>Get position at time: </strong></label> <input type=\"number\" id=\"timeInpt\" min=\"0\" step=\"0." + stepZeros + "1\" placeholder=\"Time (s)\" required><br><input type=\"submit\" value=\"Get position\"><br><div id=\"posContainer\" class=\"hidden\"><br><strong>x:</strong>&nbsp;<span id=\"xPos\"></span><br><strong>y:</strong>&nbsp;<span id=\"yPos\"></span> </div></form><br>" +
                     "<a id=\"backLink\" href=\"javascript:void(0);\">&lt;&nbsp;Try another projectile</a>" +
+                    // hidden inputs for API usage (so that the webpage itself can use these values)
                     "<input type=\"hidden\" id=\"launchVelocity\" value=\"" + req.queryParams("launchVelocity") + "\">" +
                     "<input type=\"hidden\" id=\"launchAngle\" value=\"" + req.queryParams("launchAngle") + "\">" +
                     "<input type=\"hidden\" id=\"decimalPlacesToRound\" value=\"" + req.queryParams("decimalPlaces") + "\">" +
                     "</body></html>";
         });
 
+        // API (for getting position at certain time)
         path("/api", () -> {
+            // get position at given time
             get("/getPositionAtTime", (req, res) -> {
+                // init projectile
                 Projectile projectile = new Projectile(Double.parseDouble(req.queryParams("launchVelocity")), Double.parseDouble(req.queryParams("launchAngle")));
-                double timeForPosition = Double.parseDouble(req.queryParams("time"));
+                double timeForPosition = Double.parseDouble(req.queryParams("time")); // time for requested position
 
-                res.type("application/json");
+                res.type("application/json"); // send JSON
                 return "{\"x\":" + projectile.getXPosAtTime(timeForPosition) + ",\"y\":" + projectile.getYPosAtTime(timeForPosition) + "}";
             });
         });
