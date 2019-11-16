@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Testing</title>
+</head>
+<body>
+    <h1>Projectile Motion Testing</h1>
+    <form action="/projectile" method="GET">
+        <label for="launchVelocity">Launch Velocity: </label>
+        <input type="number" min="0" step="0.001" id="launchVelocity" name="launchVelocity" required>&nbsp;m/s<br>
+
+        <label for="launchAngle">Launch Angle: </label>
+        <input type="number" min="0" step="0.001" min="0" max="90" id="launchAngle" name="launchAngle" required>&deg;<br>
+
+        <label for="decimalPlaces">Decimal Places: </label>
+        <input type="number" min="0" step="1" min="0" max="20" id="decimalPlaces" name="decimalPlaces" required>&nbsp;places<br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
