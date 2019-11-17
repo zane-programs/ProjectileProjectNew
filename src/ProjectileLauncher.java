@@ -40,6 +40,10 @@ public class ProjectileLauncher {
             Projectile projectile = new Projectile(Double.parseDouble(req.queryParams("launchVelocity")), Double.parseDouble(req.queryParams("launchAngle")));
 
             int decimalPlaces = Integer.parseInt(req.queryParams("decimalPlaces")); // user-requested decimal precision
+            // fix vulnerability that would flood the server
+            if (decimalPlaces > 20) {
+                decimalPlaces = 20;
+            }
 
             double flightTime = projectile.getFlightTime(); // flight time
 
