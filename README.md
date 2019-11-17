@@ -1,5 +1,7 @@
 # ProjectileProjectNew
 
+### Try this program live on [my website](https://projectiles.zanestjohn.com/)!
+
 Hi Austin (or whoever else might be viewing this),
 
 This is a Github repository for my projectile motion project. This repository is just a copy of my IntelliJ Idea project folder, so you should be able to open it as a project. I added the dependencies through IntelliJ, not Maven, so the dependencies will not show up in `pom.xml`. I believe the dependency information is in `./.idea/libraries`, and IntelliJ should (probably) install them for you automatically. If for some reason you cannot run the code directly from IntelliJ, I have included a jar file in the `./out` folder that will run just fine.
